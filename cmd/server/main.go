@@ -1,6 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"cashierease/config"
+
+	"github.com/gin-gonic/gin"
+)
+
+func init() {
+	config.ConnectDatabase()
+}
 
 func main() {
 	router := gin.Default()
