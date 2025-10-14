@@ -1,0 +1,30 @@
+package repositories
+
+import (
+	"cashierease/config"
+	"cashierease/internal/models"
+)
+
+func CreateCoupon(coupon *models.Coupon) error {
+	return config.DB.Create(coupon).Error
+}
+
+func GetAllCoupons() ([]models.Coupon, error) {
+	var coupons []models.Coupon
+	err := config.DB.Find(&coupons).Error
+	return coupons, err
+}
+
+func GetCouponByID(id uint) (models.Coupon, error) {
+	var coupon models.Coupon
+	err := config.DB.First(&coupon, id).Error
+	return coupon, err
+}
+
+func UpdateCoupon(coupon *models.Coupon) error {
+	return config.DB.Save(coupon).Error
+}
+
+func DeleteCoupon(id uint) error {
+	return config.DB.Delete(&models.Coupon{}, id).Error
+}
