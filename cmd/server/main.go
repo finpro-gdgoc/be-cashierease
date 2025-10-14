@@ -20,6 +20,8 @@ func main() {
 
 	routes.SetupProdukRoutes(apiV1)
 
+	routes.SetupCouponRoutes(apiV1)
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
