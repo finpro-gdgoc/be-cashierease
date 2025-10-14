@@ -1,10 +1,10 @@
 package config
 
 import (
+	"cashierease/internal/models"
 	"fmt"
 	"log"
 	"os"
-	"cashierease/internal/models"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -31,8 +31,8 @@ func ConnectDatabase() {
 	database.AutoMigrate(&models.Produk{}) 
 	fmt.Println("Database migration successful.")
 
-	database.AutoMigrate(&models.Produk{}, &models.User{}) 
-	fmt.Println("Database migration successful.")
+	database.AutoMigrate(&models.Produk{}, &models.User{}, &models.Coupon{}) 
+  fmt.Println("Database migration successful.")
 
 	DB = database
 }
