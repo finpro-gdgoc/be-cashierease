@@ -24,6 +24,8 @@ func main() {
 
 	routes.SetupTokoRoutes(apiV1)
 
+	routes.SetupOrderRoutes(apiV1)
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
