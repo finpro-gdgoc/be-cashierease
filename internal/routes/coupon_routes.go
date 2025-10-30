@@ -14,6 +14,9 @@ func SetupCouponRoutes(router *gin.RouterGroup) {
 		couponRoutes.GET("/", handlers.GetAllCoupons)
 		couponRoutes.GET("/:id", handlers.GetCouponByID)
 
+		couponRoutes.GET("/active", handlers.GetActiveCoupons)
+		couponRoutes.POST("/validate", handlers.ValidateCoupon)
+
 		adminOnly := couponRoutes.Group("/")
 		adminOnly.Use(middleware.AuthMiddleware())
 		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole))
