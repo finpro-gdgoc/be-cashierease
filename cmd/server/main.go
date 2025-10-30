@@ -14,6 +14,8 @@ func init() {
 func main() {
 	router := gin.Default()
 
+	router.Static("/public", "./public")
+
 	apiV1 := router.Group("/api/v1")
 
 	routes.SetupAuthRoutes(apiV1)
