@@ -14,6 +14,9 @@ func SetupProdukRoutes(router *gin.RouterGroup) {
 		produkRoutes.GET("/", handlers.GetAllProduk)
 		produkRoutes.GET("/:id", handlers.GetProdukById)
 
+		produkRoutes.GET("/search", handlers.SearchProdukByName)
+		produkRoutes.GET("/slug/:slug", handlers.GetProdukBySlug)
+
 		adminOnly := produkRoutes.Group("/")
 		adminOnly.Use(middleware.AuthMiddleware()) 
 		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole)) 
