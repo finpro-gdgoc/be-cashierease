@@ -31,7 +31,7 @@ func ConnectDatabase() {
 	database.AutoMigrate(&models.Produk{}) 
 	fmt.Println("Database migration successful.")
 
-	database.AutoMigrate(&models.Produk{}, &models.User{}, &models.Coupon{}, &models.Toko{}) 
+	database.AutoMigrate(&models.Produk{}, &models.User{}, &models.Coupon{}, &models.Toko{}, &models.Order{}, &models.OrderItem{}) 
     fmt.Println("Database migration successful.")
 
 	DB = database
