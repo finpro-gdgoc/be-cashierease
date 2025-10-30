@@ -17,5 +17,13 @@ func SetupOrderRoutes(router *gin.RouterGroup) {
 		{
 			protected.POST("/", handlers.CreateOrder)
 		}
+
+		statisticsRoutes := orderRoutes.Group("/statistics")
+		{
+			statisticsRoutes.GET("/", handlers.GetAllStatistics)
+			statisticsRoutes.GET("/pendapatan", handlers.GetAllPendapatan)
+			statisticsRoutes.GET("/pelanggan", handlers.GetAllPelanggan)
+			statisticsRoutes.GET("/popularMenu/:mon", handlers.GetPopularMenu)
+		}
 	}
 }
