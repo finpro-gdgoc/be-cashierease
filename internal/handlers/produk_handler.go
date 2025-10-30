@@ -37,8 +37,13 @@ func GetAllProduk(c *gin.Context) {
 }
 
 func GetProdukById(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	produk, err := repositories.GetProdukById(id)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	produk, err := repositories.GetProdukById(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
 		return
@@ -47,8 +52,13 @@ func GetProdukById(c *gin.Context) {
 }
 
 func UpdateProduk(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	produk, err := repositories.GetProdukById(id)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	produk, err := repositories.GetProdukById(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
 		return
@@ -60,6 +70,7 @@ func UpdateProduk(c *gin.Context) {
 	}
 	
 	produk.SlugProduk = slug.Make(produk.NamaProduk)
+    produk.ID = uint(id)
 
 	if err := repositories.UpdateProduk(&produk); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update produk"})
@@ -69,8 +80,13 @@ func UpdateProduk(c *gin.Context) {
 }
 
 func DeleteProduk(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	if err := repositories.DeleteProduk(id); err != nil {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	if err := repositories.DeleteProduk(uint(id)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete produk"})
 		return
 	}
