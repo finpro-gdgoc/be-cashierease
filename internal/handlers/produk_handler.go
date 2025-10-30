@@ -141,3 +141,35 @@ func UploadGambarProduk(c *gin.Context) {
 
 	c.JSON(http.StatusOK, produk)
 }
+
+func SearchProdukByName(c *gin.Context) {
+	namaQuery := c.Query("nama")
+	if namaQuery == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Query 'nama' is required"})
+		return
+	}
+
+	produks, err := repositories.SearchProdukByName(namaQuery)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to search produks"})
+		return
+	}
+
+	if len(produks) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No produks found matching query", "data": produks})
+		return
+	}
+
+	c.JSON(http.StatusOK, produks)
+}
+
+func GetProdukBySlug(c *gin.Context) {
+	slug := c.Param("slug")
+
+	produk, err := repositories.GetProdukBySlug(slug)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
+		return
+	}
+	c.JSON(http.StatusOK, produk)
+}
