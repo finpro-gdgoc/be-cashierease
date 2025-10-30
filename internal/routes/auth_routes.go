@@ -13,10 +13,11 @@ func SetupAuthRoutes(router *gin.RouterGroup) {
 	{
 		authRoutes.POST("/register", handlers.Register)
 		authRoutes.POST("/login", handlers.Login)
+		authRoutes.POST("/refresh", handlers.RefreshToken)
 
 		adminOnly := authRoutes.Group("/")
-		adminOnly.Use(middleware.AuthMiddleware())
-		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole))
+		adminOnly.Use(middleware.AuthMiddleware()) 
+		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole)) 
 		{
 			adminOnly.GET("/", handlers.GetAllUsers)
 			adminOnly.GET("/:id", handlers.GetUserByID)
