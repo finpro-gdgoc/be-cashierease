@@ -3,6 +3,7 @@ package routes
 import (
 	"cashierease/internal/handlers"
 	"cashierease/internal/middleware"
+	"cashierease/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,13 +14,13 @@ func SetupCouponRoutes(router *gin.RouterGroup) {
 		couponRoutes.GET("/", handlers.GetAllCoupons)
 		couponRoutes.GET("/:id", handlers.GetCouponByID)
 
-		// Rute yang memerlukan autentikasi
-		protected := couponRoutes.Group("/")
-		protected.Use(middleware.AuthMiddleware())
+		adminOnly := couponRoutes.Group("/")
+		adminOnly.Use(middleware.AuthMiddleware())
+		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole))
 		{
-			protected.POST("/", handlers.CreateCoupon)
-			protected.PATCH("/:id", handlers.UpdateCoupon)
-			protected.DELETE("/:id", handlers.DeleteCoupon)
+			adminOnly.POST("/", handlers.CreateCoupon)
+			adminOnly.PATCH("/:id", handlers.UpdateCoupon)
+			adminOnly.DELETE("/:id", handlers.DeleteCoupon)
 		}
 	}
 }
