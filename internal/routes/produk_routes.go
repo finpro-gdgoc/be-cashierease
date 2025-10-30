@@ -3,6 +3,7 @@ package routes
 import (
 	"cashierease/internal/handlers"
 	"cashierease/internal/middleware"
+	"cashierease/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,8 +14,13 @@ func SetupProdukRoutes(router *gin.RouterGroup) {
 		produkRoutes.GET("/", handlers.GetAllProduk)
 		produkRoutes.GET("/:id", handlers.GetProdukById)
 
-		produkRoutes.POST("/", middleware.AuthMiddleware(), handlers.CreateProduk)
-		produkRoutes.PATCH("/:id", middleware.AuthMiddleware(), handlers.UpdateProduk)
-		produkRoutes.DELETE("/:id", middleware.AuthMiddleware(), handlers.DeleteProduk)
+		adminOnly := produkRoutes.Group("/")
+		adminOnly.Use(middleware.AuthMiddleware())
+		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole))
+		{
+			adminOnly.POST("/", handlers.CreateProduk)
+			adminOnly.PATCH("/:id", handlers.UpdateProduk)
+			adminOnly.DELETE("/:id", handlers.DeleteProduk)
+		}
 	}
 }
