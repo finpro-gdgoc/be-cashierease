@@ -15,12 +15,14 @@ func SetupProdukRoutes(router *gin.RouterGroup) {
 		produkRoutes.GET("/:id", handlers.GetProdukById)
 
 		adminOnly := produkRoutes.Group("/")
-		adminOnly.Use(middleware.AuthMiddleware())
-		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole))
+		adminOnly.Use(middleware.AuthMiddleware()) 
+		adminOnly.Use(middleware.RoleMiddleware(models.AdminRole)) 
 		{
 			adminOnly.POST("/", handlers.CreateProduk)
 			adminOnly.PATCH("/:id", handlers.UpdateProduk)
 			adminOnly.DELETE("/:id", handlers.DeleteProduk)
+			
+			adminOnly.PATCH("/:id/upload", handlers.UploadGambarProduk)
 		}
 	}
 }
