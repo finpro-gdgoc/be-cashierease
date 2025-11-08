@@ -4,10 +4,10 @@ import (
 	"cashierease/internal/models"
 	"cashierease/internal/repositories"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func CreateCoupon(c *gin.Context) {
@@ -35,13 +35,13 @@ func GetAllCoupons(c *gin.Context) {
 }
 
 func GetCouponByID(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	coupon, err := repositories.GetCouponByID(uint(id))
+	coupon, err := repositories.GetCouponByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Coupon not found"})
 		return
@@ -50,13 +50,13 @@ func GetCouponByID(c *gin.Context) {
 }
 
 func UpdateCoupon(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	existingCoupon, err := repositories.GetCouponByID(uint(id))
+	existingCoupon, err := repositories.GetCouponByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Coupon not found"})
 		return
@@ -66,6 +66,7 @@ func UpdateCoupon(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	existingCoupon.ID = id
 
 	if err := repositories.UpdateCoupon(&existingCoupon); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update coupon"})
@@ -76,13 +77,13 @@ func UpdateCoupon(c *gin.Context) {
 }
 
 func DeleteCoupon(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	if err := repositories.DeleteCoupon(uint(id)); err != nil {
+	if err := repositories.DeleteCoupon(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete coupon"})
 		return
 	}

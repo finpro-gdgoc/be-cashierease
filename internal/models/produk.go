@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -14,7 +16,7 @@ const (
 )
 
 type Produk struct {
-	ID          uint      `gorm:"primaryKey" json:"id"`
+	ID          uuid.UUID `gorm:"type:uuid;primary_key;" json:"id"`
 	NamaProduk  string    `gorm:"not null" json:"nama_produk"`
 	HargaProduk float64   `gorm:"not null" json:"harga_produk"`
 	StokProduk  int       `gorm:"not null" json:"stok_produk"`
@@ -24,4 +26,9 @@ type Produk struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+func (produk *Produk) BeforeCreate(tx *gorm.DB) (err error) {
+	produk.ID = uuid.New()
+	return
 }

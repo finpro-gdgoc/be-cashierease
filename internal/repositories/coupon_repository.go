@@ -4,6 +4,8 @@ import (
 	"cashierease/config"
 	"cashierease/internal/models"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func CreateCoupon(coupon *models.Coupon) error {
@@ -16,7 +18,7 @@ func GetAllCoupons() ([]models.Coupon, error) {
 	return coupons, err
 }
 
-func GetCouponByID(id uint) (models.Coupon, error) {
+func GetCouponByID(id uuid.UUID) (models.Coupon, error) {
 	var coupon models.Coupon
 	err := config.DB.First(&coupon, id).Error
 	return coupon, err
@@ -26,7 +28,7 @@ func UpdateCoupon(coupon *models.Coupon) error {
 	return config.DB.Save(coupon).Error
 }
 
-func DeleteCoupon(id uint) error {
+func DeleteCoupon(id uuid.UUID) error {
 	return config.DB.Delete(&models.Coupon{}, id).Error
 }
 

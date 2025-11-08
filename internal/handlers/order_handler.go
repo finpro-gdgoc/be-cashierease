@@ -9,15 +9,16 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type CreateOrderInput struct {
 	OrderItems []struct {
-		ProductID uint `json:"product_id"`
-		Quantity  int  `json:"quantity"`
+		ProductID uuid.UUID `json:"product_id"`
+		Quantity  int       `json:"quantity"`
 	} `json:"order_items"`
 	Coupon struct {
-		CouponID uint `json:"couponId"`
+		CouponID uuid.UUID `json:"couponId"`
 	} `json:"coupon"`
 	PaymentMethod string `json:"payment_method"`
 }
@@ -53,7 +54,7 @@ func CreateOrder(c *gin.Context) {
 	var totalPriceDiscount float64 = 0
 	var discountAmount float64 = 0
 
-	if input.Coupon.CouponID != 0 {
+	if input.Coupon.CouponID != (uuid.UUID{}) {
 		coupon, err := repositories.GetCouponByID(input.Coupon.CouponID)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Coupon not found"})
@@ -136,7 +137,7 @@ func GetAllStatistics(c *gin.Context) {
 			totalQuantity += orderItem.Quantity
 		}
 
-		if item.Coupon.CouponID != 0 {
+		if item.Coupon.CouponID != (uuid.UUID{}) {
 			totalCouponUse++
 		}
 	}

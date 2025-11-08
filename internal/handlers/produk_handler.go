@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 )
 
@@ -41,13 +41,13 @@ func GetAllProduk(c *gin.Context) {
 }
 
 func GetProdukById(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	produk, err := repositories.GetProdukById(uint(id))
+	produk, err := repositories.GetProdukById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
 		return
@@ -56,13 +56,13 @@ func GetProdukById(c *gin.Context) {
 }
 
 func UpdateProduk(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	produk, err := repositories.GetProdukById(uint(id))
+	produk, err := repositories.GetProdukById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
 		return
@@ -74,7 +74,7 @@ func UpdateProduk(c *gin.Context) {
 	}
 	
 	produk.SlugProduk = slug.Make(produk.NamaProduk)
-    produk.ID = uint(id)
+  produk.ID = id
 
 	if err := repositories.UpdateProduk(&produk); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update produk"})
@@ -84,13 +84,13 @@ func UpdateProduk(c *gin.Context) {
 }
 
 func DeleteProduk(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	if err := repositories.DeleteProduk(uint(id)); err != nil {
+	if err := repositories.DeleteProduk(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete produk"})
 		return
 	}
@@ -98,13 +98,13 @@ func DeleteProduk(c *gin.Context) {
 }
 
 func UploadGambarProduk(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	produk, err := repositories.GetProdukById(uint(id))
+	produk, err := repositories.GetProdukById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk not found"})
 		return
@@ -123,7 +123,7 @@ func UploadGambarProduk(c *gin.Context) {
 	}
 
 	extension := filepath.Ext(file.Filename)
-	filename := fmt.Sprintf("produk-%d-%d%s", id, time.Now().Unix(), extension)
+	filename := fmt.Sprintf("produk-%s-%d%s", id.String(), time.Now().Unix(), extension)
 	savePath := filepath.Join(uploadDir, filename)
 
 	if err := c.SaveUploadedFile(file, savePath); err != nil {

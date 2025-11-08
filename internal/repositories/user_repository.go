@@ -3,6 +3,8 @@ package repositories
 import (
 	"cashierease/config"
 	"cashierease/internal/models"
+
+	"github.com/google/uuid"
 )
 
 func CreateUser(user *models.User) error {
@@ -21,7 +23,7 @@ func GetAllUsers() ([]models.User, error) {
 	return users, err
 }
 
-func GetUserByID(id uint) (models.User, error) {
+func GetUserByID(id uuid.UUID) (models.User, error) {
 	var user models.User
 	err := config.DB.First(&user, id).Error
 	return user, err
@@ -31,6 +33,6 @@ func UpdateUser(user *models.User) error {
 	return config.DB.Save(user).Error
 }
 
-func DeleteUser(id uint) error {
+func DeleteUser(id uuid.UUID) error {
 	return config.DB.Delete(&models.User{}, id).Error
 }

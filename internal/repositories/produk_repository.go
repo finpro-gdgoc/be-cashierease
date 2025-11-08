@@ -3,6 +3,8 @@ package repositories
 import (
 	"cashierease/config"
 	"cashierease/internal/models"
+
+	"github.com/google/uuid"
 )
 
 func CreateProduk(produk *models.Produk) error {
@@ -16,7 +18,7 @@ func GetAllProduk() ([]models.Produk, error) {
 	return produks, result.Error
 }
 
-func GetProdukById(id uint) (models.Produk, error) {
+func GetProdukById(id uuid.UUID) (models.Produk, error) {
 	var produk models.Produk
 	result := config.DB.First(&produk, id)
 	return produk, result.Error
@@ -27,7 +29,7 @@ func UpdateProduk(produk *models.Produk) error {
 	return result.Error
 }
 
-func DeleteProduk(id uint) error {
+func DeleteProduk(id uuid.UUID) error {
 	result := config.DB.Delete(&models.Produk{}, id)
 	return result.Error
 }
