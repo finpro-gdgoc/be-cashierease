@@ -4,6 +4,8 @@
 
 Proyek ini menyediakan endpoint RESTful untuk mengelola produk, pengguna (admin/kasir), pesanan, kupon diskon, dan statistik penjualan.
 
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/40685251-8d3f2d76-debf-42aa-8cd2-fc1b85d733cd?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D40685251-8d3f2d76-debf-42aa-8cd2-fc1b85d733cd%26entityType%3Dcollection%26workspaceId%3D4ba2f947-ece5-449b-9353-47072d025b8f#?env%5BCashierEase%20API%5D=W10=)
+
 ## ✨ Fitur Utama
 
 * **Manajemen Pengguna & Autentikasi**:
